@@ -97,13 +97,11 @@
                 let computerPoints = 0;
 
                 let selection = prompt('Rock, Paper or Scissors');
-
-                console.log(typeof(selection));
-                console.log(selection);
+                
 
                 while (rounds <= 5) {
                     
-                    while (selection.toLowerCase() !== 'rock' || selection.toLowerCase() !== 'paper' || selection.toLowerCase() !== 'scissors') {
+                    while (selection != "rock" && selection != "paper" && selection !== "scissors") {
                         selection = prompt('Rock, Paper or Scissors');
                     }
 
@@ -111,13 +109,15 @@
 
                     console.log(winner);
 
-                    
-
                     if (winner.indexOf('You Lose!') == 1) {
                         computerPoints++;
                     } else {
                         playerPoints++;
                     }
+
+                    rounds++
+
+                    selection = prompt('Rock, Paper or Scissors');
                 }
 
                 getStats(computerPoints, playerPoints);
