@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>!!! Rock Paper Scissors Game !!!</title>
+    </head>
+    <body>
+        <script>
+            
+            // TODO
+            // 1. Create computerPlay() which will return 'Rock', 'Paper' or 'Scissors' randomly. Function will be used for computer selection.
+            // 2. Create play(playerSelection, computerSelection) that will return string result of the winner. String result: "You Lose! Paper beats Rock"
+            //    - Selection must be case insensitive(rock, ROCK, RocK)
+            //    - Return result string do not print it out(console.log())
+            // 3. Create game() which will loop 5 times and call play() and keep score. It must also report the winner or loser at the end of game.
+            //    - Print results of each round.
+            //    - Prompt() user for selection.
+            //    - Feel free to re-work code.
+            //    - Feel free to add "helper" functions if you need to.
+
+            // Randomly returns 'Rock', 'Paper' or 'Scissors' for computer selection.
+            function computerPlay() {
+                let selection = Math.floor(Math.random() * Math.floor(3));
+
+                switch(selection) {
+                    case 0:
+                        return 'Rock';
+
+                    case 1:
+                        return 'Paper';
+
+                    case 2:
+                        return 'Scissors'
+                }
+            }
+
+            // Determines winner
+            function getWinner(player, computer) {
+
+                if (player == computer) {
+                    return 'draw';
+                }
+
+                if (player == 'rock') {
+                    if (computer == 'paper') {
+                        return 'cpu';
+                    }
+
+                } else if (player == 'paper') {
+                    if (computer == 'scissors') {
+                        return 'cpu';
+                    }
+
+                } else if (player == 'scissors') {
+                    if (computer == 'rock') {
+                        return 'cpu';
+                    }
+                }
+                
+                return 'p1'
+            }
+
+            // Checks winner and return string result of the winner.
+            function play(playerSelection, computerSelection) {
+
+                let winner = getWinner(playerSelection.toLowerCase(), computerSelection.toLowerCase())
+
+
+
+                if (winner == 'cpu') {
+                    return `You Lose! ${computerSelection} beats ${playerSelection}`;
+                } else {
+                    return `You Win! ${playerSelection} beats ${computerSelection}`;
+                }
+            }
+
+            function getStats(computerPoints, playerPoints) {
+
+                console.log('Game Over. Stats are as follows');
+                console.log('================================\n');
+
+                console.log(`Computer Points: ${computerPoints}`);
+                console.log(`Your Points: ${playerPoints}`);
+
+                if (computerPoints > playerPoints) {
+                    console.log('Computer wins!!!');
+                } else {
+                    console.log('You Won!!!')
+                }
+
+            }
+
+            // Loops 5 times call play(), keep score and reports the winner or loser at the end of game.
+            function game() {
+
+                let rounds = 1;
+                let playerPoints = 0;
+                let computerPoints = 0;
+
+                let selection = prompt('Rock, Paper or Scissors');
+
+                console.log(typeof(selection));
+                console.log(selection);
+
+                while (rounds <= 5) {
+                    
+                    while (selection.toLowerCase() !== 'rock' || selection.toLowerCase() !== 'paper' || selection.toLowerCase() !== 'scissors') {
+                        selection = prompt('Rock, Paper or Scissors');
+                    }
+
+                    winner = play(selection, computerPlay());
+
+                    console.log(winner);
+
+                    
+
+                    if (winner.indexOf('You Lose!') == 1) {
+                        computerPoints++;
+                    } else {
+                        playerPoints++;
+                    }
+                }
+
+                getStats(computerPoints, playerPoints);
+
+            }
+
+
+        </script>
+    </body>
+</html>
