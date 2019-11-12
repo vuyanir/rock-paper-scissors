@@ -68,23 +68,28 @@
 
                 if (winner == 'cpu') {
                     return `You Lose! ${computerSelection} beats ${playerSelection}`;
-                } else {
+                } else if (winner == 'p1') {
                     return `You Win! ${playerSelection} beats ${computerSelection}`;
+                } else {
+                    return `Its a draw. Good one.`
                 }
             }
 
-            function getStats(computerPoints, playerPoints) {
+            function getStats(computerPoints, playerPoints, drawPoints) {
 
                 console.log('Game Over. Stats are as follows');
                 console.log('================================\n');
 
                 console.log(`Computer Points: ${computerPoints}`);
                 console.log(`Your Points: ${playerPoints}`);
+                console.log(`Tie Points: ${drawPoints}`);
 
                 if (computerPoints > playerPoints) {
                     console.log('Computer wins!!!');
-                } else {
+                } else if (computerPoints < playerPoints) {
                     console.log('You Won!!!')
+                } else {
+                    console.log('It is a tie.')
                 }
 
             }
@@ -95,13 +100,14 @@
                 let rounds = 1;
                 let playerPoints = 0;
                 let computerPoints = 0;
+                let drawPoints = 0;
 
                 let selection = prompt('Rock, Paper or Scissors');
                 
 
-                while (rounds <= 5) {
+                while (rounds <= 4) {
                     
-                    while (selection != "rock" && selection != "paper" && selection !== "scissors") {
+                    while (selection.toLowerCase() != "rock" && selection.toLowerCase() != "paper" && selection.toLowerCase() != "scissors") {
                         selection = prompt('Rock, Paper or Scissors');
                     }
 
@@ -109,10 +115,12 @@
 
                     console.log(winner);
 
-                    if (winner.indexOf('You Lose!') == 1) {
+                    if (winner.indexOf('You Lose') == 0) {
                         computerPoints++;
-                    } else {
+                    } else if (winner.indexOf('You Win') == 0){
                         playerPoints++;
+                    } else {
+                        drawPoints++;
                     }
 
                     rounds++
@@ -120,7 +128,7 @@
                     selection = prompt('Rock, Paper or Scissors');
                 }
 
-                getStats(computerPoints, playerPoints);
+                getStats(computerPoints, playerPoints, drawPoints);
 
             }
 
