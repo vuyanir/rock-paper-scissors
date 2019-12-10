@@ -4,6 +4,20 @@
         <title>!!! Rock Paper Scissors Game !!!</title>
     </head>
     <body>
+
+        <h1>Rock - Paper - Scissors</h1>
+        <p>
+            <button name="rock-btn" value="Rock">Rock</button> | <button name="paper-btn" value="Paper">Paper</button> | <button name="scissors-btn" value="Scissors">Scissors</button>
+        </p>
+        <div id='stats'>
+            <h3>Game Stats</h3>
+            <ul>
+                <li data-player='user_points'>User points: <span id="user_points">0</span></li>
+                <li data-player='cpu_points'>CPU points: <span id="cpu_points">0</span></li>
+                <li data-player='tie_points'>Ties: <span id="tie_points">0</span></li>
+            </ul>
+        </div>
+
         <script>
             
             // TODO
@@ -40,18 +54,18 @@
                     return 'draw';
                 }
 
-                if (player == 'rock') {
-                    if (computer == 'paper') {
+                if (player == 'Rock') {
+                    if (computer == 'Paper') {
                         return 'cpu';
                     }
 
-                } else if (player == 'paper') {
-                    if (computer == 'scissors') {
+                } else if (player == 'Paper') {
+                    if (computer == 'Scissors') {
                         return 'cpu';
                     }
 
-                } else if (player == 'scissors') {
-                    if (computer == 'rock') {
+                } else if (player == 'Scissors') {
+                    if (computer == 'Rock') {
                         return 'cpu';
                     }
                 }
@@ -62,9 +76,7 @@
             // Checks winner and return string result of the winner.
             function play(playerSelection, computerSelection) {
 
-                let winner = getWinner(playerSelection.toLowerCase(), computerSelection.toLowerCase())
-
-
+                let winner = getWinner(playerSelection, computerSelection)
 
                 if (winner == 'cpu') {
                     return `You Lose! ${computerSelection} beats ${playerSelection}`;
@@ -75,62 +87,93 @@
                 }
             }
 
-            function getStats(computerPoints, playerPoints, drawPoints) {
-
-                console.log('Game Over. Stats are as follows');
-                console.log('================================\n');
-
-                console.log(`Computer Points: ${computerPoints}`);
-                console.log(`Your Points: ${playerPoints}`);
-                console.log(`Tie Points: ${drawPoints}`);
-
-                if (computerPoints > playerPoints) {
-                    console.log('Computer wins!!!');
-                } else if (computerPoints < playerPoints) {
-                    console.log('You Won!!!')
-                } else {
-                    console.log('It is a tie.')
-                }
+            function resetPoints (cpu_points, user_points, tie_points, stats) {
+                cpu_points.innerText = 0;
+                user_points.innerText = 0;
+                tie_points.innerText = 0;
+                stats.remove('h4');
 
             }
 
-            // Loops 5 times call play(), keep score and reports the winner or loser at the end of game.
-            function game() {
+            // Gets overall winner
+            function getStats(cpu_points, user_points, tie_points) {
 
-                let rounds = 1;
-                let playerPoints = 0;
-                let computerPoints = 0;
-                let drawPoints = 0;
 
-                let selection = prompt('Rock, Paper or Scissors');
+                const cpuPoints = parseInt(cpu_points.innerText);
+                const userPoints = parseInt(user_points.innerText);
+                const tiePoints = parseInt(tie_points.innerText);
                 
+                const theWinner = document.createElement('h4');
+                const div = document.querySelector('#stats');
 
-                while (rounds <= 4) {
-                    
-                    while (selection.toLowerCase() != "rock" && selection.toLowerCase() != "paper" && selection.toLowerCase() != "scissors") {
-                        selection = prompt('Rock, Paper or Scissors');
-                    }
-
-                    winner = play(selection, computerPlay());
-
-                    console.log(winner);
-
-                    if (winner.indexOf('You Lose') == 0) {
-                        computerPoints++;
-                    } else if (winner.indexOf('You Win') == 0){
-                        playerPoints++;
+                if ((cpuPoints + userPoints + tiePoints) == 5){
+                    if (cpuPoints > userPoints) {
+                        winner = 'Computer wins!!!';
+                    } else if (cpuPoints < userPoints) {
+                        winner = 'You Won!!!';
                     } else {
-                        drawPoints++;
+                    winner = 'It is a tie.';
                     }
 
-                    rounds++
-
-                    selection = prompt('Rock, Paper or Scissors');
+                    theWinner.innerText = winner;
+                    div.append(theWinner);
                 }
 
-                getStats(computerPoints, playerPoints, drawPoints);
+            }
+
+            // Increments winner points by 1
+            function calcPoints(winner) {
+
+                const winner_points = document.querySelector(`span[id="${winner}"]`)
+                winner_points.innerText = parseInt(winner_points.innerText) + 1;
+
+                return winner_points;
+            }
+
+            // Game start
+            function game(selection) {
+
+                const cpu = document.querySelector('#cpu_points');
+                const user = document.querySelector('#user_points');
+                const tie = document.querySelector('#tie_points');
+                const stats = document.querySelector('h4');
+
+                if ((parseInt(cpu.innerText) + parseInt(user.innerText) + parseInt(tie.innerText)) == 5) {
+                    resetPoints(cpu, user, tie, stats);
+                }
+                
+                let rounds = 1;
+
+                winner = play(selection, computerPlay());
+
+                if (winner.indexOf('You Lose') == 0) {
+                    computerPoints++;
+
+                    let cpu_points = calcPoints('cpu_points');
+
+                } else if (winner.indexOf('You Win') == 0){
+                    playerPoints++;
+
+                    let user_points = calcPoints('user_points');
+                } else {
+                    drawPoints++;
+
+                    let tie_points = calcPoints('tie_points');
+                }
+
+                getStats(cpu_points, user_points, tie_points);
 
             }
+
+            let playerPoints = 0;
+            let computerPoints = 0;
+            let drawPoints = 0;
+
+            // Appends click eventListener to each button
+            const userSelect = document.querySelectorAll('button');
+            userSelect.forEach(selection => selection.addEventListener('click', function() {
+                game(selection.value)
+            }));
 
 
         </script>
